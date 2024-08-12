@@ -15,7 +15,7 @@ pipeline {
 
                 // Clone the Git repository
                 git branch: 'main',
-                    url: 'https://github.com/JPYADAV96/devops-project-1.git'
+                    url: 'https://github.com/JPYADAV96/devops_project.git'
 
                 sh "ls -lart"
             }
