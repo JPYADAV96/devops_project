@@ -12,12 +12,29 @@ resource "aws_db_subnet_group" "dev_proje_1_db_subnet_group" {
   subnet_ids = var.subnet_groups # replace with your private subnet IDs
 }
 
-resource "aws_db_instance" "default" {
+/*resource "aws_db_instance" "default" {
   allocated_storage       = 10
   storage_type            = "gp2"
   engine                  = "mysql"
   engine_version          = "8.0.37"
   instance_class          = "db.t2.small"
+  identifier              = var.mysql_db_identifier
+  username                = var.mysql_username
+  password                = var.mysql_password
+  vpc_security_group_ids  = [var.rds_mysql_sg_id]
+  db_subnet_group_name    = aws_db_subnet_group.dev_proje_1_db_subnet_group.name
+  db_name                 = var.mysql_dbname
+  skip_final_snapshot     = true
+  apply_immediately       = true
+  backup_retention_period = 0
+  deletion_protection     = false
+}*/
+resource "aws_db_instance" "default" {
+  allocated_storage       = 10
+  storage_type            = "gp2"
+  engine                  = "mysql"
+  engine_version          = "8.0.37"
+  instance_class          = "db.t3.small"  # Changed to db.t3.small
   identifier              = var.mysql_db_identifier
   username                = var.mysql_username
   password                = var.mysql_password
