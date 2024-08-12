@@ -33,7 +33,7 @@ resource "aws_lb" "dev_proj_1_lb" {
   enable_deletion_protection = false
 
   tags = {
-    Name = "example-lb"
+    Name = "dev-proj-1-alb-unique"
   }
 }
 
