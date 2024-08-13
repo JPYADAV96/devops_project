@@ -34,7 +34,7 @@ resource "aws_db_instance" "default" {
   storage_type            = "gp2"
   engine                  = "mysql"
   engine_version          = "8.0.37"
-  instance_class          = "db.t3.small"  # Changed to db.t3.small
+  instance_class          = "db.t3.micro"  # Changed to db.t3.small
   identifier              = var.mysql_db_identifier
   username                = var.mysql_username
   password                = var.mysql_password
