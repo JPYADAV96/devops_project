@@ -1,17 +1,4 @@
-/*variable "bucket_name" {
-  type        = string
-  description = "Remote state bucket name"
-}
 
-variable "name" {
-  type        = string
-  description = "Tag name"
-}
-
-variable "environment" {
-  type        = string
-  description = "Environment name"
-}*/
 
 variable "vpc_cidr" {
   type        = string

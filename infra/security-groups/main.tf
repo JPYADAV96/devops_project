@@ -1,7 +1,3 @@
-variable "ec2_sg_name" {}
-variable "vpc_id" {}
-variable "public_subnet_cidr_block" {}
-variable "ec2_sg_name_for_python_api" {}
 
 output "sg_ec2_sg_ssh_http_id" {
   value = aws_security_group.ec2_sg_ssh_http.id
