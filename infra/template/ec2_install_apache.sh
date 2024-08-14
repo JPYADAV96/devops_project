@@ -47,42 +47,9 @@ fi
 # Add the current user to the docker group (ensure user re-login is required)
 sudo chmod 666 /var/run/docker.sock
 
-# Ensure Docker service is running
-if ! sudo systemctl start docker; then
-    echo "Failed to start Docker service!"
-    exit 1
-fi
-
-if ! sudo systemctl enable docker; then
-    echo "Failed to enable Docker service!"
-    exit 1
-fi
-
-# Print success message
-echo "Docker has been installed successfully. Please log out and log back in to apply group changes if you added yourself to the docker group."
-
-# Verify Docker installation
-if ! command -v docker >/dev/null 2>&1; then
-    echo "Docker command not found!"
-    exit 1
-fi
-
-# Check if Dockerfile exists
-if [ ! -f Dockerfile ]; then
-    echo "Dockerfile not found!"
-    exit 1
-fi
 
 # Build Docker image
-if ! sudo docker build -t flask-app .; then
-    echo "Failed to build Docker image!"
-    exit 1
-fi
-
+sudo docker build -t flask-app .
 # Run Docker container
-if ! sudo docker run -d -p 5000:5000 flask-app:latest; then
-    echo "Failed to run Docker container!"
-    exit 1
-fi
+sudo docker run -d -p 5000:5000 flask-app:latest
 
-echo "Docker container is running."
