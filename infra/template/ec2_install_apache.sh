@@ -1,10 +1,18 @@
 #! /bin/bash
 
+set -e  # Exit immediately if a command exits with a non-zero status
+
 # Update and install necessary packages
 cd /home/ubuntu
 yes | sudo apt update
 yes | sudo apt install -y python3 python3-pip
-git clone https://github.com/JPYADAV96/python-mysql-db-proj-1.git
+
+# Clone the repository
+if ! git clone https://github.com/JPYADAV96/python-mysql-db-proj-1.git; then
+    echo "Failed to clone repository!"
+    exit 1
+fi
+
 sleep 20
 
 cd python-mysql-db-proj-1
@@ -17,7 +25,10 @@ sudo apt-get install -y \
     lsb-release
 
 # Add Docker's official GPG key
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+if ! curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg; then
+    echo "Failed to add Docker's GPG key!"
+    exit 1
+fi
 
 # Set up the stable Docker repository
 echo \
@@ -28,24 +39,31 @@ echo \
 sudo apt-get update
 
 # Install Docker Engine, CLI, and containerd
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+if ! sudo apt-get install -y docker-ce docker-ce-cli containerd.io; then
+    echo "Failed to install Docker!"
+    exit 1
+fi
 
-# Add the current user to the docker group
-sudo chmod 666 /var/run/docker.sock
+# Add the current user to the docker group (ensure user re-login is required)
+sudo usermod -aG docker $USER
 
 # Ensure Docker service is running
-sudo systemctl start docker
-sudo systemctl enable docker
+if ! sudo systemctl start docker; then
+    echo "Failed to start Docker service!"
+    exit 1
+fi
+
+if ! sudo systemctl enable docker; then
+    echo "Failed to enable Docker service!"
+    exit 1
+fi
 
 # Print success message
 echo "Docker has been installed successfully. Please log out and log back in to apply group changes if you added yourself to the docker group."
 
-# Give Docker permission to access the Docker socket
-
-
 # Verify Docker installation
-if ! docker --version; then
-    echo "Docker installation failed!"
+if ! command -v docker >/dev/null 2>&1; then
+    echo "Docker command not found!"
     exit 1
 fi
 
@@ -56,7 +74,15 @@ if [ ! -f Dockerfile ]; then
 fi
 
 # Build Docker image
-sudo docker build -t flask-app .
+if ! sudo docker build -t flask-app .; then
+    echo "Failed to build Docker image!"
+    exit 1
+fi
 
 # Run Docker container
-sudo docker run -d -p 5000:5000 flask-app:latest
+if ! sudo docker run -d -p 5000:5000 flask-app:latest; then
+    echo "Failed to run Docker container!"
+    exit 1
+fi
+
+echo "Docker container is running."
