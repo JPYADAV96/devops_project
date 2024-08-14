@@ -21,13 +21,6 @@ pipeline {
             }
         }
 
-        stage('Docker build and Docker run'){
-            steps {
-                sh 'docker buil -t flask-app .'
-                sh 'docker run -d -p 5000:5000 flask-app:latest'
-            }
-        }
-
         stage('Terraform Init') {
                     steps {
                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]){
