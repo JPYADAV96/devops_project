@@ -1,16 +1,15 @@
 #! /bin/bash
 
-# shellcheck disable=SC2164
+# Update and install necessary packages
 cd /home/ubuntu
 yes | sudo apt update
-yes | sudo apt install python3 python3-pip
+yes | sudo apt install -y python3 python3-pip
 git clone https://github.com/JPYADAV96/python-mysql-db-proj-1.git
 sleep 20
 
-# shellcheck disable=SC2164
 cd python-mysql-db-proj-1
 
-# Install necessary packages for installing Docker over HTTPS
+# Install necessary packages for Docker
 sudo apt-get install -y \
     ca-certificates \
     curl \
@@ -31,17 +30,18 @@ sudo apt-get update
 # Install Docker Engine, CLI, and containerd
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-# Optional: Add the current user to the docker group to run Docker without sudo
+# Add the current user to the docker group
 sudo usermod -aG docker $USER
 
-# Print a success message
+# Ensure Docker service is running
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Print success message
 echo "Docker has been installed successfully. Please log out and log back in to apply group changes if you added yourself to the docker group."
 
 # Give Docker permission to access the Docker socket
 sudo chmod 666 /var/run/docker.sock
-
-# Ensure Docker is running
-sudo systemctl start docker
 
 # Verify Docker installation
 if ! docker --version; then
@@ -49,8 +49,20 @@ if ! docker --version; then
     exit 1
 fi
 
+# Check if Dockerfile exists
+if [ ! -f Dockerfile ]; then
+    echo "Dockerfile not found!"
+    exit 1
+fi
+
 # Build Docker image
-docker build -t flask-app .
+if ! docker build -t flask-app .; then
+    echo "Docker build failed!"
+    exit 1
+fi
 
 # Run Docker container
-docker run -d -p 5000:5000 flask-app:latest
+if ! docker run -d -p 5000:5000 flask-app:latest; then
+    echo "Docker run failed!"
+    exit 1
+fi
