@@ -45,7 +45,7 @@ if ! sudo apt-get install -y docker-ce docker-ce-cli containerd.io; then
 fi
 
 # Add the current user to the docker group (ensure user re-login is required)
-sudo usermod -aG docker $USER
+sudo chmod 666 /var/run/docker.sock
 
 # Ensure Docker service is running
 if ! sudo systemctl start docker; then
