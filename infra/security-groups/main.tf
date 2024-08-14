@@ -86,6 +86,6 @@ resource "aws_security_group" "ec2_sg_python_api" {
   }
 
   tags = {
-    Name = "Security Groups to allow traffic on port 5000"
+    Name = "Security Groups to allow traffic on port 6000"
   }
 }
