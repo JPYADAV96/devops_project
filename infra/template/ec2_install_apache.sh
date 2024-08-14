@@ -31,7 +31,7 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
 # Add the current user to the docker group
-sudo usermod -aG docker $USER
+sudo chmod 666 /var/run/docker.sock
 
 # Ensure Docker service is running
 sudo systemctl start docker
@@ -41,7 +41,7 @@ sudo systemctl enable docker
 echo "Docker has been installed successfully. Please log out and log back in to apply group changes if you added yourself to the docker group."
 
 # Give Docker permission to access the Docker socket
-sudo chmod 666 /var/run/docker.sock
+
 
 # Verify Docker installation
 if ! docker --version; then
@@ -56,13 +56,7 @@ if [ ! -f Dockerfile ]; then
 fi
 
 # Build Docker image
-if ! docker build -t flask-app .; then
-    echo "Docker build failed!"
-    exit 1
-fi
+sudo docker build -t flask-app .
 
 # Run Docker container
-if ! docker run -d -p 5000:5000 flask-app:latest; then
-    echo "Docker run failed!"
-    exit 1
-fi
+sudo docker run -d -p 5000:5000 flask-app:latest
