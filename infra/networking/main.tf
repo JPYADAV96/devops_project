@@ -21,7 +21,7 @@ resource "aws_vpc" "dev_proj_1_vpc_eu_central_1" {
 
 
 # Setup public subnet
-resource "aws_subnet" "dev_proj_1_public_subnets" {
+/*resource "aws_subnet" "dev_proj_1_public_subnets" {
   count             = length(var.cidr_public_subnet)
   vpc_id            = aws_vpc.dev_proj_1_vpc_eu_central_1.id
   cidr_block        = element(var.cidr_public_subnet, count.index)
@@ -30,8 +30,25 @@ resource "aws_subnet" "dev_proj_1_public_subnets" {
   tags = {
     Name = "dev-proj-public-subnet-${count.index + 1}"
   }
+}*/
+#------------------------------------------------------------------------
+resource "aws_subnet" "dev_proj_1_public_subnets" {
+  count             = length(var.cidr_public_subnet)
+  vpc_id            = aws_vpc.dev_proj_1_vpc_eu_central_1.id
+  cidr_block        = element(var.cidr_public_subnet, count.index)
+  availability_zone = element(var.eu_availability_zone, count.index)
+
+  map_public_ip_on_launch = true  # Enable auto-assign public IP
+
+  tags = {
+    Name = "dev-proj-public-subnet-${count.index + 1}"
+  }
 }
 
+
+
+
+#--------------------------------------------------------------------------
 # Setup private subnet
 resource "aws_subnet" "dev_proj_1_private_subnets" {
   count             = length(var.cidr_private_subnet)
