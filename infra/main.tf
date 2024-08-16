@@ -1,5 +1,3 @@
-
-
 module "networking" {
   source               = "./networking"
   vpc_cidr             = var.vpc_cidr
@@ -33,7 +31,7 @@ module "ec2" {
 module "lb_target_group" {
   source                   = "./load-balancer-target-group"
   lb_target_group_name     = "dev-proj-1-lb-target-group"
-  lb_target_group_port     = 6000
+  lb_target_group_port     = 5000
   lb_target_group_protocol = "HTTP"
   vpc_id                   = module.networking.dev_proj_1_vpc_id
   ec2_instance_id          = module.ec2.dev_proj_1_ec2_instance_id
@@ -81,3 +79,29 @@ module "rds_db_instance" {
   mysql_password       = "dbpassword"
   mysql_dbname         = "devprojdb"
 }
+
+module "ecr_repository" {
+  source = "./ecr"
+}
+
+# EKS Cluster module
+# EKS Cluster module
+# EKS Cluster module
+module "eks_cluster" {
+  source             = "./eks"
+  subnet_ids         = module.networking.dev_proj_1_public_subnets
+  cluster_name       = var.eks_cluster_name
+  cluster_version    = var.eks_cluster_version
+}
+
+
+output "eks_cluster_id" {
+  value = module.eks_cluster.cluster_id
+}
+
+output "eks_node_group_id" {
+  value = module.eks_cluster.node_group_id
+}
+
+
+
