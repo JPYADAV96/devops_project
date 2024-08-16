@@ -69,7 +69,7 @@ pipeline {
                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]){
                             dir('infra') {
                                 sh 'echo "=================Terraform Destroy=================="'
-                                sh 'terraform destroy -auto-approve'
+                                sh "terraform destroy -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27' -auto-approve"
                             }
                         }
                     }
