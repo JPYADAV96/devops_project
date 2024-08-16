@@ -54,10 +54,10 @@ docker build -t my_ecr_repo .
 echo "Starting Push Stage..."
 
 # Login to AWS ECR
-#aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 129390742221.dkr.ecr.us-west-2.amazonaws.com
+aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 129390742221.dkr.ecr.eu-central-1.amazonaws.com
 
 # Tag and Push the Docker image to AWS ECR
-#docker tag asg:latest 129390742221.dkr.ecr.us-west-2.amazonaws.com/asg:latest
-#docker push 129390742221.dkr.ecr.us-west-2.amazonaws.com/asg:latest
+docker tag my_ecr_repo:latest 129390742221.dkr.ecr.eu-central-1.amazonaws.com/my-ecr-repo:latest
+docker push 129390742221.dkr.ecr.eu-central-1.amazonaws.com/my-ecr-repo:latest
 
 echo "Docker image pushed successfully."
