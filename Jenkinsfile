@@ -39,7 +39,7 @@ pipeline {
                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]){
                             dir('infra') {
                                 sh 'echo "=================Terraform Plan=================="'
-                                sh 'terraform plan -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27''
+                                sh "terraform plan -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27'"
                             }
                         }
                     }
@@ -54,7 +54,7 @@ pipeline {
                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]){
                             dir('infra') {
                                 sh 'echo "=================Terraform Apply=================="'
-                                sh 'terraform apply -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27' -auto-approve'
+                                sh ""terraform apply -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27' -auto-approve"
                             }
                         }
                     }
