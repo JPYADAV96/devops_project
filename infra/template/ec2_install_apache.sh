@@ -32,32 +32,14 @@ yes | sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 # Add the current user to the docker group
 #sudo usermod -aG docker $USER
 sudo chmod 666 /var/run/docker.sock
-
+sudo usermod -aG docker jenkins
 # Navigate to the cloned project directory
 cd python-mysql-db-proj-1
 
+
 # Build Docker image
-#sudo docker build -t flask-app .
+sudo docker build -t flask-app .
 
 # Run Docker container
-#sudo docker run -d -p 5000:5000 flask-app:latest
+sudo docker run -d -p 5000:5000 flask-app:latest
 # Stage: Build
-echo "Starting Build Stage..."
-
-# Login to Docker registry
-docker login -u jpyadav1234 -p jc277816@@NN
-
-# Build the Docker image
-docker build -t my_ecr_repo .
-
-# Stage: Push
-echo "Starting Push Stage..."
-
-# Login to AWS ECR
-aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin https://129390742221.dkr.ecr.eu-central-1.amazonaws.com
-
-# Tag and Push the Docker image to AWS ECR
-docker tag my_ecr_repo:latest https://129390742221.dkr.ecr.eu-central-1.amazonaws.com/my-ecr-repo:latest
-docker push https://129390742221.dkr.ecr.eu-central-1.amazonaws.com/my-ecr-repo:latest
-
-echo "Docker image pushed successfully."
