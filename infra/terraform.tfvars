@@ -14,3 +14,15 @@ ec2_ami_id     = "ami-0e872aee57663ae2d"
 ec2_user_data_install_apache = ""
 
 domain_name = "rishikanaujia.com"
+
+
+# EKS Configuration
+aws_region       = "eu-central-1"
+cluster_name     = "my-eks-cluster"
+cluster_version  = "1.21"
+#cidr_public_subnet   = ["10.0.1.0/24", "10.0.2.0/24"]
+#cidr_private_subnet  = ["10.0.3.0/24", "10.0.4.0/24"]
+
+
+
+

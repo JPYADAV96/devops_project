@@ -45,4 +45,13 @@ variable "domain_name" {
   description = "Name of the domain"
 }
 
+# EKS Configuration
+variable "eks_cluster_name" {
+  description = "The name of the EKS cluster."
+  type        = string
+}
 
+variable "eks_cluster_version" {
+  description = "The version of the EKS cluster."
+  type        = string
+}
