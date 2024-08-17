@@ -43,8 +43,6 @@ pipeline {
             }
         }
 
-
-
         stage('Terraform Apply') {
             steps {
                 script {
@@ -75,6 +73,26 @@ pipeline {
             }
         }
 
+        // New Build Stage
+        stage('Build') {
+            steps {
+                withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
+                    script {
+                        app = docker.build("my-ecr-repo")
+                    }
+                }
+            }
+        }
 
+        // New Push Stage
+        stage('Push') {
+            steps {
+                script {
+                    docker.withRegistry('https://129390742221.dkr.ecr.eu-central-1.amazonaws.com/', 'ecr:eu-central-1:aws-credentials') {
+                        app.push("latest")
+                    }
+                }
+            }
+        }
     }
 }
