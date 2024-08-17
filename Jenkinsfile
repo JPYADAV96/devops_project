@@ -19,7 +19,7 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]){
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]) {
                     dir('infra') {
                         sh 'echo "=================Terraform Init=================="'
                         sh 'terraform init'
@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     if (params.PLAN_TERRAFORM) {
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]){
+                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]) {
                             dir('infra') {
                                 sh 'echo "=================Terraform Plan=================="'
                                 sh "terraform plan -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27'"
@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     if (params.APPLY_TERRAFORM) {
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]){
+                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]) {
                             dir('infra') {
                                 sh 'echo "=================Terraform Apply=================="'
                                 sh "terraform apply -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27' -auto-approve"
@@ -62,7 +62,7 @@ pipeline {
             steps {
                 script {
                     if (params.DESTROY_TERRAFORM) {
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]){
+                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails']]) {
                             dir('infra') {
                                 sh 'echo "=================Terraform Destroy=================="'
                                 sh "terraform destroy -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27' -auto-approve"
@@ -76,9 +76,8 @@ pipeline {
         // New Build Stage
         stage('Build') {
             steps {
-                git branch: "main"
+                git branch: 'main',
                     url: 'https://github.com/JPYADAV96/python-mysql-db-proj-1.git'
-                    cd: 'python-mysql-db-proj-1.git'
                 withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
                     script {
                         app = docker.build("my-ecr-repo")
