@@ -21,8 +21,6 @@ pipeline {
         // New Build Stage
         stage('Build') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/JPYADAV96/python-mysql-db-proj-1.git'
                 withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
                     script {
                         app = docker.build("my-ecr-repo")
