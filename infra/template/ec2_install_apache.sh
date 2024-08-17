@@ -32,7 +32,7 @@ yes | sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 # Add the current user to the docker group
 #sudo usermod -aG docker $USER
 sudo chmod 666 /var/run/docker.sock
-sudo usermod -aG docker jenkins
+#sudo usermod -aG docker jenkins
 # Navigate to the cloned project directory
 cd python-mysql-db-proj-1
 
