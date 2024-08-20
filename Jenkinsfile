@@ -16,6 +16,13 @@ pipeline {
             }
         }
 
+        stage('Debug Docker') {
+            steps {
+                sh 'which docker'
+                sh 'docker --version'
+            }
+        }
+
         stage('Terraform Init') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
@@ -72,22 +79,11 @@ pipeline {
             }
         }
 
-        // Docker Build and Push Stages
-        stage('Build') {
-            steps {
-                withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
-                    script {
-                        app = docker.build("my-ecr-repo", "python-mysql-db-proj-1")
-                    }
-                }
-            }
-        }
-
         stage('Docker Build') {
             steps {
                 script {
                     dir('python-mysql-db-proj-1') {
-                        sh 'docker build -t https://129390742221.dkr.ecr.eu-central-1.amazonaws.com/my-ecr-repo:latest .'
+                        sh 'docker build -t my-ecr-repo:latest .'
                     }
                 }
             }
@@ -97,7 +93,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://129390742221.dkr.ecr.eu-central-1.amazonaws.com', 'ecr:eu-central-1:aws-credentials') {
-                        sh 'docker push https://129390742221.dkr.ecr.eu-central-1.amazonaws.com/my-ecr-repo:latest'
+                        sh 'docker push 129390742221.dkr.ecr.eu-central-1.amazonaws.com/my-ecr-repo:latest'
                     }
                 }
             }
@@ -106,13 +102,7 @@ pipeline {
 
     post {
         always {
-            cleanWs() // Clean workspace after the build
-        }
-        success {
-            echo 'Docker image successfully built and pushed to AWS ECR!'
-        }
-        failure {
-            echo 'Pipeline failed.'
+            cleanWs() // Clean up workspace after the pipeline finishes
         }
     }
 }
