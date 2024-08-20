@@ -73,11 +73,20 @@ pipeline {
         }
 
         // Docker Build and Push Stages
+        stage('Build') {
+            steps {
+                withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
+                    script {
+                        app = docker.build("my-ecr-repo")
+                    }
+                }
+            }
+        }
 
         stage('Docker Build') {
             steps {
                 script {
-                    sh 'docker build -t 129390742221.dkr.ecr.eu-central-1.amazonaws.com/my-ecr-repo:latest .'
+                    sh 'docker build -t https//129390742221.dkr.ecr.eu-central-1.amazonaws.com:latest .'
                 }
             }
         }
@@ -86,7 +95,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://129390742221.dkr.ecr.eu-central-1.amazonaws.com', 'ecr:eu-central-1:aws-credentials') {
-                        sh 'docker push 129390742221.dkr.ecr.eu-central-1.amazonaws.com/my-ecr-repo:latest'
+                        sh 'docker push https//129390742221.dkr.ecr.eu-central-1.amazonaws.com/my-ecr-repo:latest'
                     }
                 }
             }
