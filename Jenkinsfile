@@ -1,76 +1,25 @@
 pipeline {
-    agent any
-
-    parameters {
-        booleanParam(name: 'PLAN_TERRAFORM', defaultValue: false, description: 'Check to plan Terraform changes')
-        booleanParam(name: 'APPLY_TERRAFORM', defaultValue: false, description: 'Check to apply Terraform changes')
-        booleanParam(name: 'DESTROY_TERRAFORM', defaultValue: false, description: 'Check to destroy Terraform resources')
+  agent any
+   stages{
+	stage('Build') { 
+            steps { 
+               withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
+                 script{
+                 app =  docker.build("asg")
+                 }
+               }
+            }
     }
 
-    stages {
-        stage('Clone Repository') {
+	stage('Push') {
             steps {
-                deleteDir()  // Clean workspace before cloning (optional)
-                git branch: 'main', url: 'https://github.com/JPYADAV96/devops_project.git'
-                sh "ls -lart"
-            }
-        }
-
-
-        stage('Terraform Init') {
-            steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    dir('infra') {
-                        sh 'echo "=================Terraform Init=================="'
-                        sh 'terraform init'
+                script{
+                    docker.withRegistry('https://129390742221.dkr.ecr.us-west-2.amazonaws.com', 'ecr:us-west-2:aws-credentials') {
+                    app.push("latest")
                     }
                 }
             }
-        }
-
-        stage('Terraform Plan') {
-            steps {
-                script {
-                    if (params.PLAN_TERRAFORM) {
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                            dir('infra') {
-                                sh 'echo "=================Terraform Plan=================="'
-                                sh "terraform plan -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27'"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                script {
-                    if (params.APPLY_TERRAFORM) {
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                            dir('infra') {
-                                sh 'echo "=================Terraform Apply=================="'
-                                sh "terraform apply -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27' -auto-approve"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Terraform Destroy') {
-            steps {
-                script {
-                    if (params.DESTROY_TERRAFORM) {
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                            dir('infra') {
-                                sh 'echo "=================Terraform Destroy=================="'
-                                sh "terraform destroy -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27' -auto-approve"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    	}
+	    
+  }
 }
