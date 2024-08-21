@@ -17,11 +17,11 @@ domain_name = "rishikanaujia.com"
 
 
 # EKS Configuration
-/*aws_region       = "eu-central-1"
+aws_region       = "eu-central-1"
 cluster_name     = "my-eks-cluster"
 cluster_version  = "1.27"
 
- */
+
 
 
 

@@ -69,7 +69,7 @@ module "aws_ceritification_manager" {
   hosted_zone_id = module.hosted_zone.hosted_zone_id
 }
 
-/*module "rds_db_instance" {
+module "rds_db_instance" {
   source               = "./rds"
   db_subnet_group_name = "dev_proj_1_rds_subnet_group"
   subnet_groups        = tolist(module.networking.dev_proj_1_public_subnets)
@@ -79,7 +79,7 @@ module "aws_ceritification_manager" {
   mysql_password       = "dbpassword"
   mysql_dbname         = "devprojdb"
 }
-*/
+
 module "ecr_repository" {
   source = "./ecr"
 }
@@ -87,7 +87,7 @@ module "ecr_repository" {
 # EKS Cluster module
 # EKS Cluster module
 # EKS Cluster module
-/*module "eks_cluster" {
+module "eks_cluster" {
   source             = "./eks"
   subnet_ids         = module.networking.dev_proj_1_public_subnets
   cluster_name       = var.eks_cluster_name
@@ -101,7 +101,7 @@ output "eks_cluster_id" {
 
 output "eks_node_group_id" {
   value = module.eks_cluster.node_group_id
-}*/
+}
 
 
 
