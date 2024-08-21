@@ -1,11 +1,18 @@
 pipeline {
   agent any
    stages{
+    stage('Clone Repository') {
+            steps {
+                deleteDir()  // Clean workspace before cloning (optional)
+                git branch: 'stage', url: 'https://github.com/JPYADAV96/python-mysql-db-proj-1.git'
+
+            }
+        }
 	stage('Build') { 
             steps { 
                withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
                  script{
-                 app =  docker.build("asg")
+                 app =  docker.build("my_ecr_repo")
                  }
                }
             }
