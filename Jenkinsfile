@@ -37,7 +37,7 @@ stages {
        }
 
 
-     
+
 
 
        stage('Terraform Apply') {
@@ -70,9 +70,5 @@ stages {
                }
            }
        }
-
-
-
-
    }
 }
