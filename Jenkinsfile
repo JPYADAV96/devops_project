@@ -16,7 +16,6 @@ pipeline {
             }
         }
 
-
         stage('Terraform Init') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
@@ -35,7 +34,7 @@ pipeline {
                         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
                             dir('infra') {
                                 sh 'echo "=================Terraform Plan=================="'
-                                sh "terraform plan -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27'"
+                                sh "terraform plan "
                             }
                         }
                     }
@@ -50,7 +49,7 @@ pipeline {
                         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
                             dir('infra') {
                                 sh 'echo "=================Terraform Apply=================="'
-                                sh "terraform apply -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27' -auto-approve"
+                                sh "terraform apply "
                             }
                         }
                     }
@@ -65,14 +64,32 @@ pipeline {
                         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
                             dir('infra') {
                                 sh 'echo "=================Terraform Destroy=================="'
-                                sh "terraform destroy -var 'eks_cluster_name=my-eks-cluster' -var 'eks_cluster_version=1.27' -auto-approve"
+                                sh "terraform destroy "
                             }
                         }
                     }
                 }
             }
         }
+
+        stage('Build') {
+            steps {
+               withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
+                 script{
+                   app = docker.build("asg")
+                 }
+               }
+            }
+        }
+
+        stage('Push') {
+            steps {
+                script {
+                    docker.withRegistry('https://129390742221.dkr.ecr.eu-central-1.amazonaws.com', 'ecr:ueu-central-1:aws-credentials') {
+                        app.push("latest")
+                    }
+                }
+            }
+        }
     }
-
-
 }
