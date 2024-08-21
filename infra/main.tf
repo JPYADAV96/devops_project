@@ -87,7 +87,7 @@ module "ecr_repository" {
 # EKS Cluster module
 # EKS Cluster module
 # EKS Cluster module
-module "eks_cluster" {
+/*module "eks_cluster" {
   source             = "./eks"
   subnet_ids         = module.networking.dev_proj_1_public_subnets
   cluster_name       = var.eks_cluster_name
@@ -101,7 +101,7 @@ output "eks_cluster_id" {
 
 output "eks_node_group_id" {
   value = module.eks_cluster.node_group_id
-}
+}*/
 
 
 
